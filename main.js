@@ -1,6 +1,6 @@
-var allProducts = [];
+const allProducts = [];
 
-var product1 = {
+const product1 = {
   name: "Mop Attire",
   imagePath: "./images/mopAttire.jpg",
   imageAlt: "Product: Mop Attire",
@@ -9,7 +9,7 @@ var product1 = {
   soldOut: false
 };
 
-var product2 = {
+const product2 = {
   name: "Taco Suit",
   imagePath: "./images/tacoSuit.jpg",
   imageAlt: "Product: Taco Suit",
@@ -18,7 +18,7 @@ var product2 = {
   soldOut: false
 };
 
-var product3 = {
+const product3 = {
   name: "Neck Decoration",
   imagePath: "./images/neckDecoration.jpg",
   imageAlt: "Product: Neck Decoration",
@@ -27,7 +27,7 @@ var product3 = {
   soldOut: false
 };
 
-var product4 = {
+const product4 = {
   name: "Head Ornament",
   imagePath: "./images/headOrnament.jpg",
   imageAlt: "Product: Head Ornament",
@@ -36,7 +36,7 @@ var product4 = {
   soldOut: true
 };
 
-var product5 = {
+const product5 = {
   name: "Boob Hat",
   imagePath: "./images/boobHat.jpg",
   imageAlt: "Product: Boob Hat",
@@ -51,30 +51,73 @@ allProducts.push(product3)
 allProducts.push(product4)
 allProducts.push(product5);
 
-console.log("All my weird baby products: ", allProducts);
+const addNewProduct = (name,imagePath,imageAlt,description,price,soldOut) => {
+  const newProduct = {name, imagePath,imageAlt,description,price,soldOut};
+  allProducts.push(newProduct);
+}
 
-var productContainer = document.getElementById("product-container");
+addNewProduct("Butt Paste","https://upload.wikimedia.org/wikipedia/en/e/e8/Boudreauxs_Butt_Paste.jpg","Here's a picture of butt cream.","blah blah", 4.99,true);
+const productContainer = document.getElementById("product-container");
 
-for ( var i = 0; i < allProducts.length; i++) {
-    var currentProduct = allProducts[i];
+function buildDomString(productArray) {
 
-    var domString = "";
+      var currentProduct = productArray;
 
-    domString +=    '<section class="product">';
-    domString +=    '<div class="title">';
-    domString +=      '<h2>' + currentProduct.name + '</h2>';
-    domString +=    '</div>';
-    domString +=    '<div class="image">';
-    domString +=      '<img src="' + currentProduct.imagePath + '" alt="' + currentProduct.imageAlt + '">';
-    domString +=    '</div>';
-    domString +=    '<div class="description">';
-    domString +=      '<p>' + currentProduct.description + '</p>';
-    domString +=      '<h6>$' + currentProduct.price + '</h6>';
-    domString +=    '</div>';
-    domString +=  '</section>';
+      let domString = "";
 
-    console.log(domString);
-    productContainer.innerHTML += domString;
+      domString +=    '<section class="product">';
+      domString +=    '<div class="title">';
+      domString +=      '<h2>' + currentProduct.name + '</h2>';
+      domString +=    '</div>';
+      domString +=    '<div class="image">';
+      domString +=      '<img src="' + currentProduct.imagePath + '" alt="' + currentProduct.imageAlt + '">';
+      domString +=    '</div>';
+      domString +=    '<div class="description">';
+      domString +=      '<p>' + currentProduct.description + '</p>';
+      domString +=      '<h6>$' + currentProduct.price + '</h6>';
+      domString +=    '</div>';
+      if (currentProduct.soldOut) {
+        domString += '<div class="sold-out child">';
+        domString +=   '<img src="./images/soldOut.png" alt="Sold Out">';
+        domString += '</div>';
+      }
+      domString +=  '</section>';
+
+      return domString;
 
 }
+
+function printProductArrayToDom(productArray) {
+  for(let i = 0; i < productArray.length; i++) {
+    const currentProduct = productArray[i];
+    const productDomString = buildDomString(currentProduct);
+    productContainer.innerHTML += productDomString;
+  }
+}
+
+printProductArrayToDom(allProducts);
+
+let selectedCard;
+
+
+document.getElementById("product-container").addEventListener("click", (event) => {
+  changeBoarder(event);
+  printSelectedDescription();
+});
+
+function changeBoarder(event) {
+  if (event.target.classList.contains("child")){
+    selectedCard = event.target.parentNode;
+  } else if (event.target.parentNode.parentNode.classList.contains("product")){
+    selectedcard = event.target.parentNode.parentNode;
+  } else if (event.target.classList.contains("product")){
+    selectedCard = event.target;
+  }
+  selectedCard.classList.add("border-funsies");
+}
+
+const printSelectedDescription = () => {
+  const description = selectedCard.childNodes;
+}
+
 
